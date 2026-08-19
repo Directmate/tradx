@@ -1,6 +1,6 @@
 const dns = require("dns");
 
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
+// dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 const path = require("path");
 const express = require("express");
@@ -19,12 +19,24 @@ const emailTransporter = nodemailer.createTransport({
 });
 
 const app = express();
-
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const client = new MongoClient(MONGODB_URI);
+if (!MONGODB_URI) {
+    console.error("❌ MONGODB_URI is missing!");
+    process.exit(1);
+}
+
+if (!JWT_SECRET) {
+    console.error("❌ JWT_SECRET is missing!");
+    process.exit(1);
+}
+
+const client = new MongoClient(MONGODB_URI, {
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
@@ -2031,9 +2043,9 @@ app.get("/api/test-email", async (req, res) => {
         // START SERVER
         // ==========================================
 
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-        });
+        app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
+});
 
     } catch (error) {
         console.error("MongoDB connection failed:", error);
