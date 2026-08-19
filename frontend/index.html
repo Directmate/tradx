@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TRADEX | Paper Trading Platform</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ==========================================================================
+         DESKTOP SIDEBAR NAVIGATION
+         ========================================================================== -->
+    <aside class="desktop-sidebar">
+      <div class="brand-container">
+        <div class="logo-box">TX</div>
+        <div>
+          <div class="brand-title">TRADEX</div>
+          <div class="brand-subtitle">Paper Trading</div>
+        </div>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active" onclick="switchTab('watchlist')">
+          <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          Watchlist
+        </li>
+        <li class="sidebar-item" onclick="switchTab('orders')">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          Orders
+        </li>
+        <li class="sidebar-item" onclick="switchTab('portfolio')">
+          <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          Portfolio
+        </li>
+        <li class="sidebar-item" onclick="switchTab('bids')">
+          <svg viewBox="0 0 24 24"><path d="M4 10h3v7H4zM10.5 3h3v14h-3zM17 14h3v3h-3z"/></svg>
+          Bids / IPO
+        </li>
+        <li class="sidebar-item" onclick="switchTab('account')">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          Account
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ==========================================================================
+         MAIN CONTENT AREA
+         ========================================================================== -->
+    <div class="main-wrapper">
+
+      <!-- DESKTOP TOP HEADER -->
+      <header class="desktop-header">
+        <div class="ticker-bar">
+          <div class="ticker-item">
+            <span class="ticker-name">NIFTY 50</span>
+            <span class="stock-ltp">18,181.75</span>
+            <span class="neg">-104.75 (-0.57%)</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-name">BANK NIFTY</span>
+            <span class="stock-ltp">43,210.50</span>
+            <span class="pos">+142.30 (+0.33%)</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <div class="virtual-balance-chip">
+            <span style="color: var(--text-muted); font-size: 11px; font-weight: 700;">VIRTUAL MARGIN:</span>
+            <span id="desktop-balance" class="pos">₹10,00,000.00</span>
+          </div>
+          <button class="icon-btn" onclick="openFundsModal()" title="Add Virtual Funds">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- MOBILE HEADER -->
+      <header class="mobile-header">
+        <div class="brand-container" style="padding: 0; border: none;">
+          <div class="logo-box" style="width: 28px; height: 28px; font-size: 14px;">TX</div>
+          <div class="mobile-header-title" id="mobile-page-title">Watchlist</div>
+        </div>
+        <div class="virtual-balance-chip" style="font-size: 11px; padding: 4px 10px;">
+          <span id="mobile-balance" class="pos">₹10L</span>
+        </div>
+      </header>
+
+      <!-- MAIN SCROLLABLE CONTENT VIEW -->
+      <main class="content-area" id="main-content">
+
+        <!-- ===================================================================
+             1. WATCHLIST VIEW
+             =================================================================== -->
+        <section id="view-watchlist">
+          <div class="tabs-wrapper" id="watchlist-tabs">
+            <div class="tab-item active" onclick="filterWatchlistTab('Nifty 50', this)">Nifty 50</div>
+            <div class="tab-item" onclick="filterWatchlistTab('My Stocks', this)">My Stocks</div>
+            <div class="tab-item" onclick="filterWatchlistTab('Bank Stocks', this)">Bank Stocks</div>
+            <div class="tab-item" onclick="filterWatchlistTab('IT Stocks', this)">IT Stocks</div>
+            <div class="tab-item" onclick="filterWatchlistTab('Favorites', this)">Favorites</div>
+          </div>
+
+          <div class="search-toolbar">
+            <div class="search-input-group">
+              <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              <input type="text" id="watchlist-search" class="search-input" placeholder="Search & add (e.g. RELIANCE, INFY)" oninput="handleSearch(this.value)">
+            </div>
+            <span class="count-indicator" id="watchlist-count">15/250</span>
+          </div>
+
+          <!-- DESKTOP SPLIT CONTAINER -->
+          <div id="watchlist-split-container">
+            <ul class="stock-list" id="stock-list-container">
+              <!-- Dynamically Populated Stock Rows -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             2. ORDERS VIEW
+             =================================================================== -->
+        <section id="view-orders" class="hidden">
+          <div class="tabs-wrapper">
+            <div class="tab-item active" onclick="filterOrders('ALL', this)">All <span class="badge badge-tag" id="cnt-all">0</span></div>
+            <div class="tab-item" onclick="filterOrders('OPEN', this)">Open <span class="badge badge-tag" id="cnt-open">0</span></div>
+            <div class="tab-item" onclick="filterOrders('COMPLETE', this)">Executed <span class="badge badge-tag" id="cnt-executed">0</span></div>
+            <div class="tab-item" onclick="filterOrders('CANCELLED', this)">Cancelled <span class="badge badge-tag" id="cnt-cancelled">0</span></div>
+          </div>
+
+          <div id="orders-list-container">
+            <!-- Dynamically Populated Orders -->
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             3. PORTFOLIO VIEW
+             =================================================================== -->
+        <section id="view-portfolio" class="hidden">
+          <div class="tabs-wrapper">
+            <div class="tab-item active" onclick="switchPortfolioTab('holdings', this)">Holdings</div>
+            <div class="tab-item" onclick="switchPortfolioTab('positions', this)">Positions</div>
+          </div>
+
+          <div class="portfolio-summary-card">
+            <div class="summary-label">Total P&L (Unrealized)</div>
+            <div class="summary-pnl-val pos" id="portfolio-total-pnl">+₹12,450.75</div>
+            <div class="summary-metrics">
+              <div>Current Value: <strong id="portfolio-current-val">₹3,45,200.00</strong></div>
+              <div>Invested: <strong id="portfolio-invested-val">₹3,32,749.25</strong></div>
+            </div>
+          </div>
+
+          <div id="portfolio-list-container">
+            <!-- Dynamically Populated Holdings / Positions -->
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             4. BIDS / IPO VIEW
+             =================================================================== -->
+        <section id="view-bids" class="hidden">
+          <div class="tabs-wrapper">
+            <div class="tab-item active">IPO</div>
+            <div class="tab-item">Government Securities</div>
+            <div class="tab-item">Auctions</div>
+          </div>
+
+          <div class="tabs-wrapper" style="background: var(--bg-body); border-bottom: 1px solid var(--border-color);">
+            <div class="tab-item active" style="font-size: 12px; padding: 8px 14px;">Ongoing</div>
+            <div class="tab-item" style="font-size: 12px; padding: 8px 14px;">Applied</div>
+            <div class="tab-item" style="font-size: 12px; padding: 8px 14px;">Upcoming</div>
+          </div>
+
+          <div id="ipo-list-container">
+            <!-- Dynamically Populated IPO Cards -->
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             5. ACCOUNT VIEW
+             =================================================================== -->
+        <section id="view-account" class="hidden">
+          <div class="account-profile-card">
+            <div class="avatar-circle">TU</div>
+            <div>
+              <div id="userName" style="font-weight: 700; font-size: 16px;">TRADEX DEMO USER</div>
+              <div style="font-size: 12px; color: var(--text-muted);">demo@tradex.com • Client ID: TX90821</div>
+            </div>
+          </div>
+
+          <div class="menu-group">
+            <div class="menu-item" onclick="openFundsModal()">
+              <div class="menu-item-left">
+                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                Funds & Virtual Margin
+              </div>
+              <span id="account-funds-val" class="pos" style="font-weight: 600;">₹10,00,000.00</span>
+            </div>
+
+            <div class="menu-item">
+              <div class="menu-item-left">
+                <svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27z"/></svg>
+                Privacy Mode
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="privacy-toggle" onchange="togglePrivacyMode(this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="menu-group">
+            <div class="menu-item" onclick="showToast('Profile modal opened')">
+              <div class="menu-item-left">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Profile & Settings
+              </div>
+              <span style="color: var(--text-light);">&rsaquo;</span>
+            </div>
+            <div class="menu-item" onclick="showToast('App Code verified')">
+              <div class="menu-item-left">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                App Security Code
+              </div>
+              <span style="color: var(--text-light);">&rsaquo;</span>
+            </div>
+          </div>
+
+          <div class="menu-group">
+            <div class="menu-item" onclick="confirmLogout()" style="color: var(--negative);">
+              <div class="menu-item-left">
+                <svg viewBox="0 0 24 24" style="fill: var(--negative);"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                Log Out
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ==========================================================================
+           MOBILE FIXED BOTTOM NAVIGATION
+           ========================================================================== -->
+      <nav class="mobile-bottom-nav">
+        <div class="nav-item active" id="nav-watchlist" onclick="switchTab('watchlist')">
+          <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          Watchlist
+        </div>
+        <div class="nav-item" id="nav-orders" onclick="switchTab('orders')">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          Orders
+        </div>
+        <div class="nav-item" id="nav-portfolio" onclick="switchTab('portfolio')">
+          <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          Portfolio
+        </div>
+        <div class="nav-item" id="nav-bids" onclick="switchTab('bids')">
+          <svg viewBox="0 0 24 24"><path d="M4 10h3v7H4zM10.5 3h3v14h-3zM17 14h3v3h-3z"/></svg>
+          Bids
+        </div>
+        <div class="nav-item" id="nav-account" onclick="switchTab('account')">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          Account
+        </div>
+      </nav>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODALS & BOTTOM SHEETS
+       ========================================================================== -->
+  
+  <!-- STOCK DETAIL / ORDER DRAWER SHEET -->
+  <div class="modal-overlay" id="order-modal-overlay">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <h3 id="modal-stock-symbol" style="font-size: 18px; font-weight: 700;">RELIANCE</h3>
+          <span style="font-size: 11px; color: var(--text-muted);">NSE • EQ</span>
+        </div>
+        <div style="text-align: right;">
+          <div id="modal-stock-price" style="font-weight: 700; font-size: 18px;">₹1,420.50</div>
+          <div id="modal-stock-change" class="pos" style="font-size: 12px;">+12.40 (+0.88%)</div>
+        </div>
+      </div>
+
+      <!-- CHART AREA -->
+      <div style="background: var(--bg-body); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 16px;">
+        <div class="chart-timeframes">
+          <button class="tf-btn active" onclick="updateChartTimeframe('1D', this)">1D</button>
+          <button class="tf-btn" onclick="updateChartTimeframe('1W', this)">1W</button>
+          <button class="tf-btn" onclick="updateChartTimeframe('1M', this)">1M</button>
+          <button class="tf-btn" onclick="updateChartTimeframe('1Y', this)">1Y</button>
+        </div>
+        <canvas id="stockCanvasChart" height="150" style="width: 100%; display: block;"></canvas>
+      </div>
+
+      <!-- BUY / SELL TOGGLE -->
+      <div class="order-toggle-group">
+        <button class="order-toggle-btn buy-active" id="btn-mode-buy" onclick="setOrderMode('BUY')">BUY</button>
+        <button class="order-toggle-btn" id="btn-mode-sell" onclick="setOrderMode('SELL')">SELL</button>
+      </div>
+
+      <!-- ORDER INPUT FORM -->
+      <form onsubmit="executeOrder(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product</label>
+            <select class="form-input" id="order-product">
+              <option value="CNC">CNC (Delivery)</option>
+              <option value="MIS">MIS (Intraday)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-input" id="order-type" onchange="toggleLimitPrice(this.value)">
+              <option value="MARKET">MARKET</option>
+              <option value="LIMIT">LIMIT</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" class="form-input" id="order-qty" value="10" min="1" oninput="recalculateOrderEst()">
+          </div>
+          <div class="form-group">
+            <label>Limit Price</label>
+            <input type="number" class="form-input" id="order-limit-price" value="1420.50" step="0.05" disabled>
+          </div>
+        </div>
+
+        <div class="order-summary-box">
+          <span>Estimated Value</span>
+          <strong id="order-est-val">₹14,205.00</strong>
+        </div>
+
+        <button type="submit" class="btn-submit-order btn-buy" id="btn-order-submit">VIRTUAL BUY</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FUNDS MODAL -->
+  <div class="modal-overlay" id="funds-modal-overlay">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Virtual Paper Funds</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Add demo paper capital to test your trading strategies with zero risk.</p>
+      
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label>Add Margin Amount (₹)</label>
+        <input type="number" class="form-input" id="funds-add-input" value="50000" step="10000">
+      </div>
+
+      <button class="btn-submit-order btn-buy" onclick="addPaperFunds()">+ Add Virtual Cash</button>
+      <button class="btn-submit-order" style="background: var(--bg-body); color: var(--text-main); margin-top: 8px;" onclick="closeFundsModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- TOAST ALERTS -->
+  <div class="toast" id="toast-alert">
+    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: var(--positive);"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    <span id="toast-message">Order Executed Successfully!</span>
+  </div>
+
+
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>

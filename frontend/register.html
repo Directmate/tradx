@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TradeX | Create Account</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f7fb;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .register-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 35px;
+        }
+
+        .register-logo {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .register-subtitle {
+            color: #6b7280;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+        }
+
+        .register-button {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .register-button:hover {
+            background: #1d4ed8;
+        }
+
+        .register-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 7px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .login-section {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .login-section a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <div class="register-card">
+
+            <div class="register-logo">
+                TradeX
+            </div>
+
+            <p class="register-subtitle">
+                Create your paper trading account
+            </p>
+
+            <div id="errorMessage"
+                 class="message error-message">
+            </div>
+
+            <div id="successMessage"
+                 class="message success-message">
+            </div>
+
+            <form id="registerForm">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="register-button">
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+            <div class="login-section">
+
+                Already have an account?
+
+                <a href="/login.html">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+
+        registerForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                errorMessage.style.display = "none";
+                successMessage.style.display = "none";
+
+
+                const name =
+                    document.getElementById("name")
+                    .value
+                    .trim();
+
+                const email =
+                    document.getElementById("email")
+                    .value
+                    .trim();
+
+                const password =
+                    document.getElementById("password")
+                    .value;
+
+                const confirmPassword =
+                    document.getElementById("confirmPassword")
+                    .value;
+
+
+                if (password !== confirmPassword) {
+
+                    errorMessage.textContent =
+                        "Passwords do not match.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
+
+                    errorMessage.textContent =
+                        "Password must be at least 6 characters.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                registerButton.disabled = true;
+
+                registerButton.textContent =
+                    "Creating Account...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/register",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    name: name,
+                                    email: email,
+                                    password: password
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Registration failed."
+                        );
+
+                    }
+
+
+                    successMessage.textContent =
+                        "Account created successfully. Redirecting to login...";
+
+                    successMessage.style.display =
+                        "block";
+
+
+                    registerForm.reset();
+
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "/login.html";
+
+                        },
+                        1500
+                    );
+
+
+                } catch (error) {
+
+                    errorMessage.textContent =
+                        error.message;
+
+                    errorMessage.style.display =
+                        "block";
+
+                } finally {
+
+                    registerButton.disabled =
+                        false;
+
+                    registerButton.textContent =
+                        "Create Account";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
